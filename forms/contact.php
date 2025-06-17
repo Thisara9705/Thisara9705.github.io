@@ -1,41 +1,61 @@
 <?php
-  /**
-  * Requires the "PHP Email Form" library
-  * The "PHP Email Form" library is available only in the pro version of the template
-  * The library should be uploaded to: vendor/php-email-form/php-email-form.php
-  * For more info and help: https://bootstrapmade.com/php-email-form/
-  */
+/**
+ * Requires the "PHP Email Form" library.
+ * The "PHP Email Form" library must be uploaded to: assets/vendor/php-email-form/php-email-form.php
+ * For more info: https://bootstrapmade.com/php-email-form/
+ */
 
-  // Replace contact@example.com with your real receiving email address
-  $receiving_email_address = 'tdwicramasinghe22@gmail.com';
+// Replace with your real receiving email address
+$receiving_email_address = 'tdwicramasinghe22@gmail.com';
 
-  if( file_exists($php_email_form = '../assets/vendor/php-email-form/php-email-form.php' )) {
-    include( $php_email_form );
-  } else {
-    die( 'Unable to load the "PHP Email Form" Library!');
-  }
+// Path to the PHP Email Form library
+$php_email_form_path = __DIR__ . '/../assets/vendor/php-email-form/php-email-form.php';
 
-  $contact = new PHP_Email_Form;
-  $contact->ajax = true;
-  
-  $contact->to = $receiving_email_address;
-  $contact->from_name = $_POST['name'];
-  $contact->from_email = $_POST['email'];
-  $contact->subject = $_POST['subject'];
+// Load the library
+if (file_exists($php_email_form_path)) {
+    include($php_email_form_path);
+} else {
+    die('Unable to load the "PHP Email Form" Library!');
+}
 
-  // Uncomment below code if you want to use SMTP to send emails. You need to enter your correct SMTP credentials
-  /*
-  $contact->smtp = array(
-    'host' => 'example.com',
-    'username' => 'example',
-    'password' => 'pass',
+// Check for required POST fields
+if (
+    !isset($_POST['name']) ||
+    !isset($_POST['email']) ||
+    !isset($_POST['subject']) ||
+    !isset($_POST['message'])
+) {
+    die('All form fields are required.');
+}
+
+// Sanitize input
+$name    = strip_tags(trim($_POST['name']));
+$email   = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
+$subject = strip_tags(trim($_POST['subject']));
+$message = strip_tags(trim($_POST['message']));
+
+// Create contact form object
+$contact = new PHP_Email_Form;
+$contact->ajax = true;
+
+$contact->to = $receiving_email_address;
+$contact->from_name = $name;
+$contact->from_email = $email;
+$contact->subject = $subject;
+
+// SMTP configuration (uncomment if using SMTP)
+$contact->smtp = array(
+    'host' => 'smtp.mailersend.net',
+    'username' => 'MS_F2lSJn@test-z0vklo6n2xpl7qrx.mlsender.net',
+    'password' => 'mssp.frcwIo4.3zxk54v0oj6gjy6v.SOBKgB7',
     'port' => '587'
-  );
-  */
+);
 
-  $contact->add_message( $_POST['name'], 'From');
-  $contact->add_message( $_POST['email'], 'Email');
-  $contact->add_message( $_POST['message'], 'Message', 10);
+// Message fields
+$contact->add_message($name, 'From');
+$contact->add_message($email, 'Email');
+$contact->add_message($message, 'Message', 10);
 
-  echo $contact->send();
+// Send email and output result
+echo $contact->send();
 ?>
