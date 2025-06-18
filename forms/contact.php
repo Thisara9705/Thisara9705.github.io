@@ -44,12 +44,12 @@ $contact->from_email = $email;
 $contact->subject = $subject;
 
 // SMTP configuration (uncomment if using SMTP)
-$contact->smtp = array(
-    'host' => 'smtp.mailersend.net',
-    'username' => 'MS_F2lSJn@test-z0vklo6n2xpl7qrx.mlsender.net',
-    'password' => 'mssp.frcwIo4.3zxk54v0oj6gjy6v.SOBKgB7',
-    'port' => '587'
-);
+// $contact->smtp = array(
+//     'host' => '',
+//     'username' => '',
+//     'password' => '',
+//     'port' => '587'
+// );
 
 // Message fields
 $contact->add_message($name, 'From');
